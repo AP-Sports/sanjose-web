@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <link rel="icon" type="image/png" href="../img/logo.png">
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description" content="Panel de administración de Congregación B. San José">
+
+  <title>
+    Panel - Congregación B. San José
+  </title>
+
+  <link rel="stylesheet" href="css/panel.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs" type="module"></script>
+
+</head>
+
+
+<body>
+
+
+  <!-- =========================
+       ENCABEZADO
+       ========================= -->
+
+  <header class="site-header">
+
+    <div class="header-inner">
+
+      <div>
+
+        <h1>
+          Panel de administración
+        </h1>
+
+        <p>
+          Congregación B. San José
+        </p>
+
+      </div>
+
+
+      <button id="logout-button" type="button">
+        Cerrar sesión
+      </button>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- =========================
+       CONTENIDO
+       ========================= -->
+
+  <main class="container">
+
+
+    <!-- =========================
+         AGREGAR LISTA
+         ========================= -->
+
+    <section class="admin-card">
+
+      <h2>
+        Agregar lista
+      </h2>
+
+
+      <p class="description">
+        Agregá una nueva lista al sitio.
+      </p>
+
+
+      <form id="list-form">
+
+
+        <div class="field">
+
+          <label for="list-name">
+            Nombre de la lista
+          </label>
+
+
+          <input
+            id="list-name"
+            type="text"
+            placeholder="Ej. Acomodadores"
+            required
+          >
+
+        </div>
+
+
+
+        <div class="field">
+
+          <label for="list-image">
+            Archivo
+          </label>
+
+
+          <input
+            id="list-image"
+            type="file"
+          >
+
+        </div>
+
+
+
+        <div
+          id="preview-container"
+          class="preview-container"
+          hidden
+        >
+
+          <p>
+            Vista previa:
+          </p>
+
+
+          <img
+            id="preview-image"
+            src=""
+            alt="Vista previa"
+          >
+
+        </div>
+
+
+
+        <button
+          id="add-button"
+          type="submit"
+        >
+          Agregar lista
+        </button>
+
+
+        <p
+          id="message"
+          class="message"
+          aria-live="polite"
+        ></p>
+
+      </form>
+
+    </section>
+
+
+
+    <!-- =========================
+         LISTAS EXISTENTES
+         ========================= -->
+
+    <section class="admin-card">
+
+      <h2>
+        Listas existentes
+      </h2>
+
+
+      <div
+        id="lists-container"
+        class="lists-container"
+      ></div>
+
+
+      <p
+        id="lists-message"
+        class="message"
+        aria-live="polite"
+      ></p>
+
+    </section>
+
+  </main>
+
+
+
+  <!-- =========================
+       MODAL DE EDICIÓN
+       ========================= -->
+
+  <div
+    id="edit-modal"
+    class="edit-modal"
+    aria-hidden="true"
+  >
+
+
+    <div
+      class="edit-modal-box"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="edit-modal-title"
+    >
+
+
+      <button
+        id="edit-modal-close"
+        class="edit-modal-close"
+        type="button"
+        aria-label="Cerrar"
+      >
+        ×
+      </button>
+
+
+
+      <h2 id="edit-modal-title">
+        Editar lista
+      </h2>
+
+
+
+      <div class="edit-modal-field">
+
+        <label for="edit-name">
+          Nombre de la lista
+        </label>
+
+
+        <input
+          id="edit-name"
+          type="text"
+          required
+        >
+
+      </div>
+
+
+
+      <div class="edit-modal-field">
+
+        <label for="edit-image">
+          Nuevo archivo (opcional)
+        </label>
+
+
+        <input
+          id="edit-image"
+          type="file"
+        >
+
+      </div>
+
+
+
+      <img
+        id="edit-preview"
+        class="edit-preview"
+        src=""
+        alt="Vista previa"
+      >
+
+
+
+      <div class="edit-modal-actions">
+
+
+        <button
+          id="edit-save"
+          class="save-button"
+          type="button"
+        >
+          Guardar cambios
+        </button>
+
+
+        <button
+          id="edit-cancel"
+          class="cancel-button"
+          type="button"
+        >
+          Cancelar
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =========================
+       JAVASCRIPT
+       ========================= -->
+
+  <script src="js/panel.js"></script>
+
+
+</body>
+
+</html>
