@@ -1,0 +1,182 @@
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --text: #172033;
+  --muted: #687286;
+  --border: #e2e5eb;
+  --accent: #4877be;
+  --accent-hover: #3865a8;
+  --error: #b42318;
+  --shadow: 0 5px 18px rgba(23, 32, 51, 0.08);
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: var(--bg);
+  color: var(--text);
+
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+
+  padding: 30px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: 18px;
+
+  box-shadow: var(--shadow);
+}
+
+h1 {
+  margin: 0;
+
+  font-size: 1.55rem;
+  line-height: 1.2;
+}
+
+.subtitle {
+  margin: 7px 0 26px;
+
+  color: var(--muted);
+
+  font-size: 0.95rem;
+}
+
+.field {
+  margin-bottom: 17px;
+}
+
+label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  min-height: 46px;
+
+  padding: 0 13px;
+
+  border: 1px solid var(--border);
+  border-radius: 10px;
+
+  background: #fff;
+  color: var(--text);
+
+  font: inherit;
+
+  outline: none;
+}
+
+input:focus {
+  border-color: var(--accent);
+
+  box-shadow:
+    0 0 0 3px rgba(72, 119, 190, 0.12);
+}
+
+button {
+  width: 100%;
+  min-height: 47px;
+
+  margin-top: 5px;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: var(--accent);
+  color: white;
+
+  font: inherit;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background: var(--accent-hover);
+}
+
+button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.message {
+  margin: 15px 0 0;
+
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.message.error {
+  color: var(--error);
+}
+
+/* =========================
+   BOTÓN VOLVER
+   ========================= */
+
+.back-button {
+  display: block;
+
+  margin-top: 18px;
+
+  text-align: center;
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  color: var(--accent);
+
+  opacity: 0.75;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.back-button:hover {
+  opacity: 1;
+}
+
+.back-button:active {
+  transform: scale(0.98);
+}
