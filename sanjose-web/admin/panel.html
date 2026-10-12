@@ -1,0 +1,371 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <link rel="icon" type="image/png" href="../img/logo.png">
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description" content="Panel de administración de Congregación B. San José">
+
+  <title>Panel - Congregación B. San José</title>
+
+  <link rel="stylesheet" href="css/panel.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- PDF.js: miniaturas de páginas -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs" type="module"></script>
+
+  <!-- pdf-lib: crear el PDF final con las páginas seleccionadas -->
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+</head>
+
+<body>
+
+  <!-- =========================
+       ENCABEZADO
+       ========================= -->
+
+  <header class="site-header">
+
+    <div class="header-inner">
+
+      <div>
+        <h1>Panel de administración</h1>
+        <p>Congregación B. San José</p>
+      </div>
+
+      <button id="logout-button" type="button">
+        Cerrar sesión
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- =========================
+       CONTENIDO
+       ========================= -->
+
+  <main class="container">
+
+    <!-- =========================
+         BOTONES PARA AGREGAR
+         ========================= -->
+
+    <section class="admin-card add-actions-card">
+
+      <button
+        id="open-add-list"
+        class="add-choice-button"
+        type="button"
+      >
+        Agregar Lista
+      </button>
+
+      <button
+        id="open-add-announcement"
+        class="add-choice-button"
+        type="button"
+      >
+        Agregar Anuncio
+      </button>
+
+    </section>
+
+
+    <!-- =========================
+         ANUNCIOS / LISTAS
+         ========================= -->
+
+    <section class="admin-card">
+
+      <div
+        class="admin-category-tabs"
+        role="group"
+        aria-label="Filtrar por categoría"
+      >
+
+        <button
+          class="admin-category-tab"
+          type="button"
+          data-category="1"
+          aria-pressed="false"
+        >
+          Anuncios
+        </button>
+
+        <button
+          class="admin-category-tab active"
+          type="button"
+          data-category="0"
+          aria-pressed="true"
+        >
+          Listas
+        </button>
+
+        <span
+          class="admin-category-indicator"
+          aria-hidden="true"
+        ></span>
+
+      </div>
+
+      <div
+        id="lists-container"
+        class="lists-container"
+      ></div>
+
+      <p
+        id="lists-message"
+        class="message"
+        aria-live="polite"
+      ></p>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       MODAL PARA AGREGAR
+       LISTA O ANUNCIO
+       ========================= -->
+
+  <div
+    id="add-modal"
+    class="edit-modal"
+    aria-hidden="true"
+  >
+
+    <div
+      class="edit-modal-box"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="add-modal-title"
+    >
+
+      <button
+        id="add-modal-close"
+        class="edit-modal-close"
+        type="button"
+        aria-label="Cerrar"
+      >
+        ×
+      </button>
+
+      <h2 id="add-modal-title">
+        Agregar lista
+      </h2>
+
+      <p
+        id="add-modal-description"
+        class="description"
+      >
+        Agregá una nueva lista al sitio.
+      </p>
+
+      <form id="list-form">
+
+        <div class="field">
+
+          <label for="list-name">
+            Nombre de la lista
+          </label>
+
+          <input
+            id="list-name"
+            type="text"
+            placeholder="Ej. Acomodadores"
+            required
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label for="list-image">
+            Archivo
+          </label>
+
+          <input
+            id="list-image"
+            type="file"
+            accept="image/*,.pdf,application/pdf"
+            required
+          >
+
+        </div>
+
+        <div
+          id="preview-container"
+          class="preview-container"
+          hidden
+        >
+
+          <p>Vista previa:</p>
+
+          <img
+            id="preview-image"
+            src=""
+            alt="Vista previa"
+          >
+
+        </div>
+
+        <section
+          id="pdf-page-picker"
+          class="pdf-page-picker"
+          hidden
+          aria-label="Seleccionar páginas del anuncio"
+        >
+          <div class="pdf-picker-heading">
+            <div>
+              <h3>Seleccioná las páginas que querés publicar</h3>
+              <p>El PDF final contendrá únicamente las páginas marcadas y conservará el orden original.</p>
+            </div>
+            <p id="pdf-selection-count" class="pdf-selection-count" aria-live="polite">0 páginas seleccionadas</p>
+          </div>
+          <p id="pdf-picker-status" class="pdf-picker-status" aria-live="polite"></p>
+          <div id="pdf-pages-grid" class="pdf-pages-grid"></div>
+        </section>
+
+        <button
+          id="add-button"
+          class="save-button add-submit-button"
+          type="submit"
+        >
+          Agregar lista
+        </button>
+
+        <p
+          id="message"
+          class="message"
+          aria-live="polite"
+        ></p>
+
+        <div class="edit-modal-actions">
+
+          <button
+            id="add-modal-cancel"
+            class="cancel-button"
+            type="button"
+          >
+            Cancelar
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       MODAL DE EDICIÓN
+       ========================= -->
+
+  <div
+    id="edit-modal"
+    class="edit-modal"
+    aria-hidden="true"
+  >
+
+    <div
+      class="edit-modal-box"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="edit-modal-title"
+    >
+
+      <button
+        id="edit-modal-close"
+        class="edit-modal-close"
+        type="button"
+        aria-label="Cerrar"
+      >
+        ×
+      </button>
+
+      <h2 id="edit-modal-title">
+        Editar lista
+      </h2>
+
+      <div class="edit-modal-field">
+
+        <label for="edit-name">
+          Nombre de la lista
+        </label>
+
+        <input
+          id="edit-name"
+          type="text"
+          required
+        >
+
+      </div>
+
+      <div class="edit-modal-field">
+
+        <label for="edit-image">
+          Nuevo archivo (opcional)
+        </label>
+
+        <input
+          id="edit-image"
+          type="file"
+          accept="image/*,.pdf,application/pdf"
+        >
+
+      </div>
+
+      <img
+        id="edit-preview"
+        class="edit-preview"
+        src=""
+        alt="Vista previa"
+      >
+
+      <div class="edit-modal-actions">
+
+        <button
+          id="edit-save"
+          class="save-button"
+          type="button"
+        >
+          Guardar cambios
+        </button>
+
+        <button
+          id="edit-cancel"
+          class="cancel-button"
+          type="button"
+        >
+          Cancelar
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       JAVASCRIPT
+       ========================= -->
+
+  <script src="js/panel.js"></script>
+
+</body>
+
+</html>
